@@ -8,7 +8,7 @@ const express = require('express');
 
 const Login = async (req, res) => {
     try{
-        res.send('Login');
+        res.status(200).send({ message: 'Login' , data: req.body})
     }
     catch{
         res.send('Error');

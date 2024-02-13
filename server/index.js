@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const port = 5000;
+//middleware to interact with json
+app.use(express.json());
 
 const authRouter = require('./routes/auth-router');
 const AdminRouter = require('./routes/admin-router');
