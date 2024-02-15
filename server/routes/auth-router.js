@@ -4,7 +4,7 @@ const authControllers = require('../controllers/auth-controller');
 
 // to get body params, we need to use post request
 router.route('/login').post(authControllers.Login);
-router.route('/signup').get(authControllers.Signup);
+router.route('/signup').post(authControllers.Signup);
 
 // chaining of requests
 // router.route('/signup').get((req, res) => {
