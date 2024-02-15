@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+const DBconnect = require('./db/DBconnect');
+
 const port = 5000;
 //middleware to interact with json
 app.use(express.json());
@@ -11,14 +14,20 @@ app.use('/auth/', authRouter);
 app.use('/admin/', AdminRouter);
  
 
-app.get('/', (req,res)=>{
-    res.send('Hello World, port number: ' + port);
-})
+DBconnect().then(()=>{
+    app.listen(port, ()=>{
+        console.log(`Server app listening at http://localhost:${port}`);
+    })
+    
+}
+)
+
+// app.get('/', (req,res)=>{
+//     res.send('Hello World, port number: ' + port);
+
+// })
 
 // app.get('/login', (req,res)=>{
 //     res.send('Login');
 // })
 
-app.listen(port, ()=>{
-    console.log(`Example app listening at http://localhost:${port}`);
-})
