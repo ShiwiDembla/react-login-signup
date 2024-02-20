@@ -45,8 +45,18 @@ userSchema.pre('save', async function(next){
     next();
 }
 );
+
+// instance method to compare password
+userSchema.methods.comparePassword = async function(password){
+    // this refers to the user object and directly accessing the password
+    return bcrypt.compare(password, this.password);
+}
+
+
 // instance method to generate token
+// can be implemented with try catch block
 userSchema.methods.generateToken = async function(){
+    
     // this refers to the user object
     const user = this;
     // jwt with sign method is used to generate token 

@@ -9,8 +9,32 @@ const bcrypt = require('bcrypt');
 // }
 
 const Login = async (req, res) => {
+    const {email, password} = req.body;
     try{
-        res.status(200).send({ message: 'Login' , data: req.body})
+        //returns entire row of the user, not just the email
+       const userExists = await userModel.findOne({email})
+
+       // if user doesn't exist it just returns null, and the code will break.
+       if(!userExists){
+           return res.status(400).send({message: 'User does not exist'});
+         }
+
+         // create a new async function in model to store the result of the comparison
+
+        //  const isMatch = await bcrypt.compare(password, userExists.password);
+        const isMatch = await userExists.comparePassword(password);
+
+            if(!isMatch){
+                // 401 is for unauthorized access
+                return res.status(401).send({message: 'Invalid credentials'});
+            }
+            // const token = await userExists.generateToken();
+            res.status(200).send({
+                message: 'Login successful',
+                data: userExists,
+                token: await userExists.generateToken(),
+                userId: userExists._id.toString(),
+            });
     }
     catch{
         res.send('Error');
