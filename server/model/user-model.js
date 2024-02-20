@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -44,5 +45,24 @@ userSchema.pre('save', async function(next){
     next();
 }
 );
+// instance method to generate token
+userSchema.methods.generateToken = async function(){
+    // this refers to the user object
+    const user = this;
+    // jwt with sign method is used to generate token 
+    // payload is the data that is being sent in the token
+    // secret is used to sign the token
+    // expiresIn is the time after which the token will expire
+
+    const token = jwt.sign(
+        // payload
+        {_id: user._id}, 
+        // secret
+        process.env.JWT_SECRET, 
+        {expiresIn: '7d'});
+    return token;
+}
+
+
 const userModel = mongoose.model('User', userSchema);
 module.exports = userModel;

@@ -29,7 +29,13 @@ const Signup = async (req, res) => {
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
         const user = await userModel.create({username, email, phone, password, isAdmin: false});
 
-        res.status(201).send({message: 'User created successfully', data: user});
+        res.status(201).send({
+        message: 'User created successfully', 
+        data: user, 
+        token: await user.generateToken(),
+        //converting to string as the _id is an object
+        userId: user._id.toString(),
+    });
 
     }
     catch{
