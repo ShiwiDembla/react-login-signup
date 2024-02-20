@@ -11,4 +11,10 @@ const z = require ('zod');
     password: z.string({required_error:'Password is required'}).min(8, {message: 'Password must be at least 8 characters long'}  ).max(255)
 });
 
-module.exports = registerValidator;
+const loginValidator = z.object({
+    email: z.string({required_error:'Email is required'}).trim().email().min(12,{message: 'Email must be at least 12 characters long'}),
+    password: z.string({required_error:'Password is required'}).min(8, {message: 'Password must be at least 8 characters long'}  ).max(255)
+});
+
+
+module.exports = {registerValidator, loginValidator};

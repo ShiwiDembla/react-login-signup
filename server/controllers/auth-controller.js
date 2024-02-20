@@ -3,13 +3,14 @@
 const express = require('express');
 const userModel = require('../model/user-model');
 const bcrypt = require('bcrypt');
+const errorMiddleware = require('../middleware/error-middleware');
 
 
 //  const home = (req, res) => {
 //     res.send('Hello World');
 // }
 
-const Login = async (req, res) => {
+const Login = async (req, res, next) => {
     const {email, password} = req.body;
     try{
         //returns entire row of the user, not just the email
@@ -37,12 +38,20 @@ const Login = async (req, res) => {
                 userId: userExists._id.toString(),
             });
     }
-    catch{
-        res.send('Error');
+    catch(error){
+        // res.send('Error');
+        const status = 400;
+        const message = error.message;
+        const err = {
+            status,
+            message,
+        }
+        console.log('Error in success: ', error.message)
+        next(err);
     
     }
 }
-const Signup = async (req, res) => {
+const Signup = async (req, res, next) => {
     try{
         const {username, email, phone, password} = req.body;
         const userExists = await userModel.findOne({email});
@@ -63,8 +72,16 @@ const Signup = async (req, res) => {
     });
 
     }
-    catch{
-        res.send('Error');
+    catch(error){
+        const status = 400;
+        const message = error.message;
+        const err = {
+            status,
+            message,
+        }
+        console.log('Error in success: ', error.message)
+        next(err);
+
     
     }
 }
