@@ -31,6 +31,7 @@ const Login = async (req, res, next) => {
                 return res.status(401).send({message: 'Invalid credentials'});
             }
             // const token = await userExists.generateToken();
+             
             res.status(200).send({
                 message: 'Login successful',
                 data: userExists,
@@ -62,6 +63,7 @@ const Signup = async (req, res, next) => {
         const saltRounds = 10;
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
         const user = await userModel.create({username, email, phone, password, isAdmin: false});
+        user.save( );
 
         res.status(201).send({
         message: 'User created successfully', 

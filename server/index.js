@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const DBconnect = require('./db/DBconnect');
 const authRouter = require('./routes/auth-router');
 const AdminRouter = require('./routes/admin-router');
+const contactRouter = require('./routes/contact-router');
+
 const errorMiddleware = require('./middleware/error-middleware');
 
 const port = 5000;
@@ -30,6 +32,7 @@ DBconnect().then(()=>{
     
     app.use('/auth/', authRouter);
 app.use('/admin/', AdminRouter);
+app.use('/contact/', contactRouter);
 
 // middleware should be at the end of the app.use
 app.use(errorMiddleware);
