@@ -7,11 +7,17 @@ const DBconnect = require('./db/DBconnect');
 const authRouter = require('./routes/auth-router');
 const AdminRouter = require('./routes/admin-router');
 const contactRouter = require('./routes/contact-router');
-
 const errorMiddleware = require('./middleware/error-middleware');
+const cors = require('cors');
 
-const port = 5000;
+const corsOptions = {
+    origin: 'http://127.0.0.1:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionSuccessStatus: 200
+}
 
+app.use(cors(corsOptions));
 //middleware to interact with json
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -23,6 +29,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 
+const port = 5000;
  
 
 DBconnect().then(()=>{
