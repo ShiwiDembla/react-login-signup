@@ -5,12 +5,14 @@ import {toast} from 'react-toastify'
 
 export default function Login() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false);
   const {saveToken} = useAuth()
   const [data, setData] = useState({
     email: '',
     password: ''
   })
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault()
     try{
     const response = await fetch("http://localhost:5000/auth/login", {
@@ -22,10 +24,10 @@ export default function Login() {
     })
     const result = await response.json()
     console.log(result)
+    setIsLoading(false);
     if(response.ok){
-     
-        toast.success('This is a success notification!');
       
+        toast.success('Logged in Successfully');
       setData({
         email: '',
         password: ''
@@ -33,15 +35,21 @@ export default function Login() {
       // localStorage.setItem('token', result.token)
       console.log("logged in")
       saveToken(result.token)
+      sessionStorage.setItem('user',result.token)
       
       navigate('/home')
     }
+    
     else{
-      alert('Invalid Credentials')
+      // alert('Invalid Credentials')
+      toast.error('Email or Password is incorrect');
     }
 
   }
     catch(error){
+      
+      toast.error('Internal Server Error');
+      setIsLoading(false);
       console.log(error)
     }
   }
@@ -87,7 +95,9 @@ export default function Login() {
                   required/>
                   </div>
                   <br/>
-                  <button type="submit" className="btn btn-submit" onClick={handleSubmit}>Login</button>
+                  <button type="submit" className="btn btn-submit" onClick={handleSubmit}
+                  disabled={isLoading}
+                  >Login</button>
               
               </form>
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
@@ -8,8 +8,13 @@ export const AuthProvider = ({ children }) => {
  const saveToken = (token) => {
         localStorage.setItem("token", token);
       };
-const isLoggedIn = !!token;
+      const [isLoggedIn, setIsLoggedIn] = useState(!!token); // Initialize isLoggedIn state based on token
+
 console.log("isLogged in value:"+ isLoggedIn)
+useEffect(() => {
+    // Update isLoggedIn state whenever token changes
+    setIsLoggedIn(!!token);
+}, [token]);
 
       const getToken = () => {
         return token;
